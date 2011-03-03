@@ -1,0 +1,5 @@
+#surefire
+#Thu Feb 24 20:28:42 CST 2011
+user.dir=/export/dev/azhang/library
+localRepository=/export/repository
+basedir=/export/dev/azhang/library

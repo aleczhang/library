@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ox85.sql.maps.BBRMap">
+    <sql id="bbrPageColumnList">
+        bbr.id, r.bar_code as readerBarCode, r.name as readerName,
+        b.bar_code as bookBarCode, b.name as bookName,
+        bbr.bdate, bbr.rdate
+    </sql>
+
+    <insert id="insertBBR" parameterType="BBR">
+        INSERT INTO bbr (book_id, reader_id, bdate)
+        VALUES (#{bookId}, #{readerId}, #{bdate})
+    </insert>
+
+    <update id="updateBBR" parameterType="BBR">
+        UPDATE bbr SET
+        returned = #{returned},
+        rdate = #{rdate}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectBookReturnByBookBarCode" resultType="BBR">
+        SELECT
+        <include refid="bbrPageColumnList"/>
+        FROM reader r, book b, bbr
+        WHERE bbr.returned = false AND
+        b.bar_code = #{bookBarCode} AND b.id = bbr.book_id AND r.id = bbr.reader_id
+    </select>
+
+    <select id="selectBBRCount" resultType="int">
+        SELECT COUNT(*) FROM bbr
+    </select>
+
+    <select id="selectBBR" resultType="BBR">
+        SELECT
+        <include refid="bbrPageColumnList"/>
+        FROM reader r, book b, bbr
+        WHERE r.id = bbr.reader_id AND b.id = bbr.book_id
+        ORDER BY bbr.returned, bbr.bdate DESC
+    </select>
+
+    <select id="selectBBRCountByReaderBarCode" resultType="int">
+        SELECT COUNT(*) FROM reader r, bbr
+        WHERE r.bar_code = #{readerBarCode} AND r.id = bbr.reader_id
+    </select>
+
+    <select id="selectBBRByReaderBarCode" resultType="BBR">
+        SELECT
+        <include refid="bbrPageColumnList"/>
+        FROM reader r, book b, bbr
+        WHERE r.bar_code = #{readerBarCode} AND r.id = bbr.reader_id AND b.id = bbr.book_id
+        ORDER BY bbr.returned, bbr.bdate DESC
+    </select>
+
+    <select id="selectBBRCountByBookBarCode" resultType="int">
+        SELECT COUNT(*) FROM book b, bbr
+        WHERE b.bar_code = #{bookBarCode} AND b.id = bbr.book_id
+    </select>
+
+    <select id="selectBBRByBookBarCode" resultType="BBR">
+        SELECT
+        <include refid="bbrPageColumnList"/>
+        FROM reader r, book b, bbr
+        WHERE b.bar_code = #{bookBarCode} AND b.id = bbr.book_id AND r.id = bbr.reader_id
+        ORDER BY bbr.returned, bbr.bdate DESC
+    </select>
+
+    <select id="selectBBRCountByReturned" resultType="int">
+        SELECT COUNT(*) FROM bbr WHERE returned = #{returned}
+    </select>
+
+    <select id="selectBBRByReturned" resultType="BBR">
+        SELECT
+        <include refid="bbrPageColumnList"/>
+        FROM reader r, book b, bbr
+        WHERE bbr.returned = #{returned} AND bbr.reader_id = r.id AND bbr.book_id = b.id
+        ORDER BY bbr.returned, bbr.bdate DESC
+    </select>
+
+    <select id="selectBBRDayReport" resultType="cn.ox85.models.report.DayData">
+        SELECT COUNT(*) AS dnum, DATE(bdate) AS ddate FROM bbr
+        WHERE bdate BETWEEN #{0, jdbcType=DATE} AND #{1, jdbcType=DATE}
+        GROUP BY ddate ORDER BY ddate
+    </select>
+
+    <select id="selectBBRMonthReport" resultType="cn.ox85.models.report.MonthData">
+        SELECT COUNT(*) AS mnum, YEAR(bdate) AS dyear, MONTH(bdate) AS dmonth FROM bbr
+        WHERE bdate BETWEEN #{0, jdbcType=DATE} AND #{1, jdbcType=DATE}
+        GROUP BY dyear, dmonth ORDER BY dyear, dmonth
+    </select>
+
+    <select id="selectBBRYearReport" resultType="cn.ox85.models.report.YearData">
+        SELECT COUNT(*) AS ynum, YEAR(bdate) AS dyear FROM bbr
+        WHERE bdate BETWEEN #{0, jdbcType=DATE} AND #{1, jdbcType=DATE}
+        GROUP BY dyear ORDER BY dyear
+    </select>
+</mapper>

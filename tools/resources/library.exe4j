@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="4.4.1" transformSequenceNumber="1">
+  <directoryPresets config="D:/dev/azhang/library/tools/resources" />
+  <application name="library" distributionSourceDir="d:/dev/azhang/library/target/library-0.1.0">
+    <languages>
+      <principalLanguage id="en" customLocalizationFile="" />
+    </languages>
+  </application>
+  <executable name="library" type="1" iconSet="true" iconFile="D:/dev/azhang/library/tools/resources/main.ico" executableDir="." redirectStderr="true" stderrFile="log/error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="log/output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="true" globalSingleInstance="false" amd64="false">
+    <messageSet />
+    <versionInfo include="false" fileVersion="0.1.0.0" fileDescription="" legalCopyright="" internalName="" productName="" companyName="" productVersion="0.1.0.0" />
+  </executable>
+  <splashScreen show="true" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="D:/dev/azhang/library/tools/resources/loading.png" java6SplashScreen="true">
+    <text>
+      <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+      <versionLine x="20" y="40" text="version %VERSION%" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+    </text>
+  </splashScreen>
+  <java mainClass="cn.ox85.ui.Main" vmParameters="-Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true" minVersion="1.6" maxVersion="" allowBetaVM="false" jdkOnly="false">
+    <searchSequence>
+      <registry />
+      <envVar name="JAVA_HOME" />
+      <envVar name="JDK_HOME" />
+    </searchSequence>
+    <classPath>
+      <directory location="./config" failOnError="false" />
+      <scanDirectory location="./lib" failOnError="false" />
+    </classPath>
+    <nativeLibraryDirectories />
+  </java>
+  <includedFiles />
+  <unextractableFiles />
+</exe4j>
+

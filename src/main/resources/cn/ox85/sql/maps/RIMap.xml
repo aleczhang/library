@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ox85.sql.maps.RIMap">
+    <sql id="riPageColumnList">
+        ri.id, r.bar_code as readerBarCode, r.name as readerName, ri.datetime
+    </sql>
+
+    <insert id="insertRI" parameterType="RI">
+        INSERT INTO ri (reader_id, datetime) VALUES (#{readerId}, #{datetime})
+    </insert>
+
+    <select id="selectRICount" resultType="int">
+        SELECT COUNT(*) FROM ri
+    </select>
+
+    <select id="selectRI" resultType="RI">
+        SELECT
+        <include refid="riPageColumnList"/>
+        FROM ri, reader r WHERE ri.reader_id = r.id
+        ORDER BY ri.datetime DESC
+    </select>
+
+    <select id="selectRICountByReaderBarCode" resultType="int">
+        SELECT COUNT(*) FROM ri, reader r WHERE r.bar_code = #{readerBarCode} AND ri.reader_id = r.id
+    </select>
+
+    <select id="selectRIByReaderBarCode" resultType="RI">
+        SELECT
+        <include refid="riPageColumnList"/>
+        FROM ri, reader r WHERE r.bar_code = #{readerBarCode} AND ri.reader_id = r.id
+        ORDER BY ri.datetime DESC
+    </select>
+
+    <select id="selectRICountByReaderName" resultType="int">
+        SELECT COUNT(*) FROM ri, reader r WHERE r.name LIKE #{readerName} AND ri.reader_id = r.id
+    </select>
+
+    <select id="selectRIByReaderName" resultType="RI">
+        SELECT
+        <include refid="riPageColumnList"/>
+        FROM ri, reader r WHERE r.name LIKE #{readerName} AND ri.reader_id = r.id
+        ORDER BY ri.datetime DESC
+    </select>
+
+    <select id="selectRIDayReport" resultType="cn.ox85.models.report.DayData">
+        SELECT COUNT(*) AS dnum, DATE(datetime) AS ddate FROM ri
+        WHERE datetime BETWEEN #{0, jdbcType=DATE} AND #{1, jdbcType=DATE}
+        GROUP BY ddate ORDER BY ddate
+    </select>
+
+    <select id="selectRIMonthReport" resultType="cn.ox85.models.report.MonthData">
+        SELECT COUNT(*) AS mnum, YEAR(datetime) AS dyear, MONTH(datetime) AS dmonth FROM ri
+        WHERE datetime BETWEEN #{0, jdbcType=DATE} AND #{1, jdbcType=DATE}
+        GROUP BY dyear, dmonth ORDER BY dyear, dmonth
+    </select>
+
+    <select id="selectRIYearReport" resultType="cn.ox85.models.report.YearData">
+        SELECT COUNT(*) AS ynum, YEAR(datetime) AS dyear FROM ri
+        WHERE datetime BETWEEN #{0, jdbcType=DATE} AND #{1, jdbcType=DATE}
+        GROUP BY dyear ORDER BY dyear
+    </select>
+</mapper>
